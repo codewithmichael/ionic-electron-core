@@ -1,6 +1,4 @@
-'use strict';
-
-function ChatsFactory() {
+export default function ChatsFactory() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
@@ -47,6 +45,4 @@ function ChatsFactory() {
       return null;
     }
   };
-}
-
-module.exports = [ChatsFactory];
+};

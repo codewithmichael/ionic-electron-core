@@ -1,6 +1,4 @@
-'use strict';
+import angular from 'angular';
 
-var angular = require('angular');
-
-module.exports = angular.module('dash', [])
+export default angular.module('dash', [])
   .controller('DashController', require('./dash-controller'));

@@ -59313,7 +59313,12 @@ ionic.views.Slider = ionic.views.View.inherit({
 },{}],7:[function(require,module,exports){
 'use strict';
 
-function AppConfigRouter($stateProvider, $urlRouterProvider) {
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = AppConfig;
+
+function AppConfig($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -59368,20 +59373,18 @@ function AppConfigRouter($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/tab/dash');
 }
 
-module.exports = ['$stateProvider', '$urlRouterProvider', AppConfigRouter];
+;
+module.exports = exports['default'];
 
 },{}],8:[function(require,module,exports){
-'use strict';
+"use strict";
 
-var angular = require('angular');
-require('ionic-angular');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = AppMain;
 
-module.exports = angular.module('starter.modules', ['ionic', require('./modules/account').name, require('./modules/chats').name, require('./modules/dash').name]);
-
-},{"./modules/account":12,"./modules/chats":16,"./modules/dash":18,"angular":4,"ionic-angular":5}],9:[function(require,module,exports){
-'use strict';
-
-function AppRunMain($ionicPlatform) {
+function AppMain($ionicPlatform) {
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -59396,22 +59399,49 @@ function AppRunMain($ionicPlatform) {
   });
 }
 
-module.exports = ['$ionicPlatform', AppRunMain];
+;
+module.exports = exports["default"];
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
-var angular = require('angular');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+var _modules = require('./modules');
+
+var _modules2 = _interopRequireDefault(_modules);
+
+var _appMain = require('./app-main');
+
+var _appMain2 = _interopRequireDefault(_appMain);
+
+var _appConfig = require('./app-config');
+
+var _appConfig2 = _interopRequireDefault(_appConfig);
 
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html and as a module prefix in app-modules.js)
+// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', [require('./app-modules').name]).run(require('./app-run-main')).config(require('./app-config-router'));
+exports['default'] = _angular2['default'].module('starter', [_modules2['default'].name]).run(_appMain2['default']).config(_appConfig2['default']);
+module.exports = exports['default'];
 
-},{"./app-config-router":7,"./app-modules":8,"./app-run-main":9,"angular":4}],11:[function(require,module,exports){
-'use strict';
+},{"./app-config":7,"./app-main":8,"./modules":18,"angular":4}],10:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = AccountController;
 
 function AccountController($scope) {
   $scope.settings = {
@@ -59419,26 +59449,47 @@ function AccountController($scope) {
   };
 }
 
-module.exports = ['$scope', AccountController];
+;
+module.exports = exports["default"];
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
-var angular = require('angular');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-module.exports = angular.module('account', []).controller('AccountController', require('./account-controller'));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-},{"./account-controller":11,"angular":4}],13:[function(require,module,exports){
-'use strict';
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+exports['default'] = _angular2['default'].module('account', []).controller('AccountController', require('./account-controller'));
+module.exports = exports['default'];
+
+},{"./account-controller":10,"angular":4}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = ChatDetailController;
 
 function ChatDetailController($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 }
 
-module.exports = ['$scope', '$stateParams', 'Chats', ChatDetailController];
+;
+module.exports = exports["default"];
 
-},{}],14:[function(require,module,exports){
-'use strict';
+},{}],13:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = ChatsController;
 
 function ChatsController($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -59455,10 +59506,16 @@ function ChatsController($scope, Chats) {
   };
 }
 
-module.exports = ['$scope', 'Chats', ChatsController];
+;
+module.exports = exports["default"];
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports['default'] = ChatsFactory;
 
 function ChatsFactory() {
   // Might use a resource here that returns a JSON array
@@ -59509,27 +59566,82 @@ function ChatsFactory() {
   };
 }
 
-module.exports = [ChatsFactory];
+;
+module.exports = exports['default'];
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
-var angular = require('angular');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-module.exports = angular.module('chats', []).controller('ChatsController', require('./chats-controller')).controller('ChatDetailController', require('./chat-detail-controller')).factory('Chats', require('./chats-factory'));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-},{"./chat-detail-controller":13,"./chats-controller":14,"./chats-factory":15,"angular":4}],17:[function(require,module,exports){
-'use strict';
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+exports['default'] = _angular2['default'].module('chats', []).controller('ChatsController', require('./chats-controller')).controller('ChatDetailController', require('./chat-detail-controller')).factory('Chats', require('./chats-factory'));
+module.exports = exports['default'];
+
+},{"./chat-detail-controller":12,"./chats-controller":13,"./chats-factory":14,"angular":4}],16:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = DashController;
 
 function DashController($scope) {}
 
-module.exports = ['$scope', DashController];
+;
+module.exports = exports["default"];
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
-var angular = require('angular');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-module.exports = angular.module('dash', []).controller('DashController', require('./dash-controller'));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-},{"./dash-controller":17,"angular":4}]},{},[10]);
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+exports['default'] = _angular2['default'].module('dash', []).controller('DashController', require('./dash-controller'));
+module.exports = exports['default'];
+
+},{"./dash-controller":16,"angular":4}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _angular = require('angular');
+
+var _angular2 = _interopRequireDefault(_angular);
+
+require('ionic-angular');
+
+var _account = require('./account');
+
+var _account2 = _interopRequireDefault(_account);
+
+var _chats = require('./chats');
+
+var _chats2 = _interopRequireDefault(_chats);
+
+var _dash = require('./dash');
+
+var _dash2 = _interopRequireDefault(_dash);
+
+exports['default'] = _angular2['default'].module('modules', ['ionic', _account2['default'].name, _chats2['default'].name, _dash2['default'].name]);
+module.exports = exports['default'];
+
+},{"./account":11,"./chats":15,"./dash":17,"angular":4,"ionic-angular":5}]},{},[9]);

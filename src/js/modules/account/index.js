@@ -1,6 +1,4 @@
-'use strict';
+import angular from 'angular';
 
-var angular = require('angular');
-
-module.exports = angular.module('account', [])
+export default angular.module('account', [])
   .controller('AccountController', require('./account-controller'));

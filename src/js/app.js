@@ -1,12 +1,14 @@
-'use strict';
+import angular from 'angular';
 
-var angular = require('angular');
+import modules from './modules';
+import main from './app-main';
+import config from './app-config';
 
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html and as a module prefix in app-modules.js)
+// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', [require('./app-modules').name])
-  .run(require('./app-run-main'))
-  .config(require('./app-config-router'));
+export default angular.module('starter', [modules.name])
+  .run(main)
+  .config(config);
