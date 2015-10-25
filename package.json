@@ -7,6 +7,7 @@
     "browserify-shim": "^3.8.10",
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
+    "gulp-jade": "^1.1.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.0.4",
@@ -29,7 +30,9 @@
     "ios"
   ],
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "browser": {
     "angular": "./bower_components/angular/angular.js",
@@ -41,9 +44,21 @@
   },
   "browserify-shim": {
     "angular": "angular",
-    "angular-animate": { "depends": ["angular"] },
-    "angular-sanitize": { "depends": ["angular"] },
-    "angular-ui-router": { "depends": ["angular"] },
+    "angular-animate": {
+      "depends": [
+        "angular"
+      ]
+    },
+    "angular-sanitize": {
+      "depends": [
+        "angular"
+      ]
+    },
+    "angular-ui-router": {
+      "depends": [
+        "angular"
+      ]
+    },
     "ionic": "ionic",
     "ionic-angular": {
       "depends": [

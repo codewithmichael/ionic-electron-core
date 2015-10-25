@@ -8,20 +8,20 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var jade = require('gulp-jade');
 
 var paths = {
   fonts: ['./bower_components/ionic/fonts/*'],
-  html: ['./src/**/*.html'],
+  jade: ['./src/**/*.jade'],
   images: ['./src/img/*'],
   js: ['./src/**/*.js'],
   sass: ['./src/scss/**/*.scss']
 };
 
-gulp.task('default', ['copy', 'browserify', 'sass']);
+gulp.task('default', ['copy', 'jade', 'browserify', 'sass']);
 
 gulp.task('copy', function() {
   gulp.src(paths.fonts).pipe(gulp.dest('www/fonts'));
-  gulp.src(paths.html).pipe(gulp.dest('www'));
   gulp.src(paths.images).pipe(gulp.dest('www/img'));
 });
 
@@ -30,6 +30,13 @@ gulp.task('browserify', function() {
     .bundle()
     .pipe(source('app.js'))
     .pipe(gulp.dest('./www/js'));
+});
+
+gulp.task('jade', function() {
+  gulp.src(paths.jade)
+    .pipe(jade({ pretty: true }))
+    .pipe(rename({ extname: '.html' }))
+    .pipe(gulp.dest('./www'));
 });
 
 gulp.task('sass', function(done) {
@@ -46,8 +53,9 @@ gulp.task('sass', function(done) {
 });
 
 gulp.task('watch', function() {
-  var assets = paths.html.concat(paths.fonts, paths.images);
+  var assets = paths.fonts.concat(paths.images);
   gulp.watch(assets, ['copy']);
+  gulp.watch(paths.jade, ['jade']);
   gulp.watch(paths.js, ['browserify']);
   gulp.watch(paths.sass, ['sass']);
 });
