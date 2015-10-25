@@ -18,14 +18,14 @@ var paths = {
   sass: ['./src/scss/**/*.scss']
 };
 
-gulp.task('default', ['copy', 'jade', 'browserify', 'sass']);
+gulp.task('default', ['copy', 'jade', 'scripts', 'sass']);
 
 gulp.task('copy', function() {
   gulp.src(paths.fonts).pipe(gulp.dest('www/fonts'));
   gulp.src(paths.images).pipe(gulp.dest('www/img'));
 });
 
-gulp.task('browserify', function() {
+gulp.task('scripts', function() {
   return browserify('./src/js/app.js')
     .bundle()
     .pipe(source('app.js'))
@@ -56,7 +56,7 @@ gulp.task('watch', function() {
   var assets = paths.fonts.concat(paths.images);
   gulp.watch(assets, ['copy']);
   gulp.watch(paths.jade, ['jade']);
-  gulp.watch(paths.js, ['browserify']);
+  gulp.watch(paths.js, ['scripts']);
   gulp.watch(paths.sass, ['sass']);
 });
 

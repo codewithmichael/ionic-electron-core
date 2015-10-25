@@ -59322,7 +59322,7 @@ function AppConfigRouter($stateProvider, $urlRouterProvider) {
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'
@@ -59338,28 +59338,23 @@ function AppConfigRouter($stateProvider, $urlRouterProvider) {
         controller: 'DashController'
       }
     }
-  })
-
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsController'
-        }
+  }).state('tab.chats', {
+    url: '/chats',
+    views: {
+      'tab-chats': {
+        templateUrl: 'templates/tab-chats.html',
+        controller: 'ChatsController'
       }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailController'
-        }
+    }
+  }).state('tab.chat-detail', {
+    url: '/chats/:chatId',
+    views: {
+      'tab-chats': {
+        templateUrl: 'templates/chat-detail.html',
+        controller: 'ChatDetailController'
       }
-    })
-
-  .state('tab.account', {
+    }
+  }).state('tab.account', {
     url: '/account',
     views: {
       'tab-account': {
@@ -59381,24 +59376,18 @@ module.exports = ['$stateProvider', '$urlRouterProvider', AppConfigRouter];
 var angular = require('angular');
 require('ionic-angular');
 
-module.exports = angular.module('starter.modules', [
-  'ionic',
-  require('./modules/account').name,
-  require('./modules/chats').name,
-  require('./modules/dash').name
-]);
+module.exports = angular.module('starter.modules', ['ionic', require('./modules/account').name, require('./modules/chats').name, require('./modules/dash').name]);
 
 },{"./modules/account":12,"./modules/chats":16,"./modules/dash":18,"angular":4,"ionic-angular":5}],9:[function(require,module,exports){
 'use strict';
 
 function AppRunMain($ionicPlatform) {
-  $ionicPlatform.ready(function() {
+  $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -59419,9 +59408,7 @@ var angular = require('angular');
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html and as a module prefix in app-modules.js)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', [require('./app-modules').name])
-  .run(require('./app-run-main'))
-  .config(require('./app-config-router'));
+angular.module('starter', [require('./app-modules').name]).run(require('./app-run-main')).config(require('./app-config-router'));
 
 },{"./app-config-router":7,"./app-modules":8,"./app-run-main":9,"angular":4}],11:[function(require,module,exports){
 'use strict';
@@ -59439,8 +59426,7 @@ module.exports = ['$scope', AccountController];
 
 var angular = require('angular');
 
-module.exports = angular.module('account', [])
-  .controller('AccountController', require('./account-controller'));
+module.exports = angular.module('account', []).controller('AccountController', require('./account-controller'));
 
 },{"./account-controller":11,"angular":4}],13:[function(require,module,exports){
 'use strict';
@@ -59449,8 +59435,7 @@ function ChatDetailController($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 }
 
-module.exports = ['$scope', '$stateParams', 'Chats',
-                  ChatDetailController];
+module.exports = ['$scope', '$stateParams', 'Chats', ChatDetailController];
 
 },{}],14:[function(require,module,exports){
 'use strict';
@@ -59465,7 +59450,7 @@ function ChatsController($scope, Chats) {
   //});
 
   $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
+  $scope.remove = function (chat) {
     Chats.remove(chat);
   };
 }
@@ -59507,13 +59492,13 @@ function ChatsFactory() {
   }];
 
   return {
-    all: function() {
+    all: function all() {
       return chats;
     },
-    remove: function(chat) {
+    remove: function remove(chat) {
       chats.splice(chats.indexOf(chat), 1);
     },
-    get: function(chatId) {
+    get: function get(chatId) {
       for (var i = 0; i < chats.length; i++) {
         if (chats[i].id === parseInt(chatId)) {
           return chats[i];
@@ -59531,10 +59516,7 @@ module.exports = [ChatsFactory];
 
 var angular = require('angular');
 
-module.exports = angular.module('chats', [])
-  .controller('ChatsController', require('./chats-controller'))
-  .controller('ChatDetailController', require('./chat-detail-controller'))
-  .factory('Chats', require('./chats-factory'));
+module.exports = angular.module('chats', []).controller('ChatsController', require('./chats-controller')).controller('ChatDetailController', require('./chat-detail-controller')).factory('Chats', require('./chats-factory'));
 
 },{"./chat-detail-controller":13,"./chats-controller":14,"./chats-factory":15,"angular":4}],17:[function(require,module,exports){
 'use strict';
@@ -59548,7 +59530,6 @@ module.exports = ['$scope', DashController];
 
 var angular = require('angular');
 
-module.exports = angular.module('dash', [])
-  .controller('DashController', require('./dash-controller'));
+module.exports = angular.module('dash', []).controller('DashController', require('./dash-controller'));
 
 },{"./dash-controller":17,"angular":4}]},{},[10]);

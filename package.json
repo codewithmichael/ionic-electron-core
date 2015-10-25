@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "ionic-electron-core: An Ionic project",
   "dependencies": {
+    "babelify": "^6.4.0",
     "browserify": "^11.2.0",
     "browserify-shim": "^3.8.10",
     "gulp": "^3.5.6",
@@ -31,6 +32,7 @@
   ],
   "browserify": {
     "transform": [
+      ["babelify", { "ignore": "bower_components" }],
       "browserify-shim"
     ]
   },
