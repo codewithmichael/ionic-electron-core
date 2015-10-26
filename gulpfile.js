@@ -4,6 +4,8 @@ var bower = require('bower');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
+var minifyHtml = require('gulp-minify-html');
+var minifyJs = require('gulp-uglify');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 var browserify = require('browserify');
@@ -13,7 +15,6 @@ var jade = require('gulp-jade');
 var templateCache = require('gulp-angular-templatecache');
 var runSequence = require('run-sequence');
 var clean = require('gulp-rimraf');
-var uglify = require('gulp-uglify');
 
 var isProduction = !!gutil.env.production;
 
@@ -54,6 +55,7 @@ gulp.task('copy', function() {
 gulp.task('templates', function() {
   return gulp.src(paths.templates)
     .pipe(jade({ pretty: true }))
+    .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
     .pipe(templateCache({
       filename: 'templates.js',
       module: 'templates',
@@ -68,13 +70,14 @@ gulp.task('scripts', function() {
   return browserify('./src/js/app.js')
     .bundle()
     .pipe(source('app.js'))
-    .pipe(isProduction ? streamify(uglify()) : gutil.noop())
+    .pipe(isProduction ? streamify(minifyJs()) : gutil.noop())
     .pipe(gulp.dest('./www/js'));
 });
 
 gulp.task('jade', function() {
   return gulp.src(paths.jade)
     .pipe(jade({ pretty: true }))
+    .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
     .pipe(gulp.dest('./www'));
 });
 

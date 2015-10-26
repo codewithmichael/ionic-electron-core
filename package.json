@@ -12,6 +12,7 @@
     "gulp-concat": "^2.2.0",
     "gulp-jade": "^1.1.0",
     "gulp-minify-css": "^0.3.0",
+    "gulp-minify-html": "^1.0.4",
     "gulp-rename": "^1.2.0",
     "gulp-rimraf": "^0.2.0",
     "gulp-sass": "^2.0.4",
