@@ -54,7 +54,6 @@ gulp.task('copy', function() {
 gulp.task('templates', function() {
   return gulp.src(paths.templates)
     .pipe(jade({ pretty: true }))
-    .pipe(rename({ extname: '.html' }))
     .pipe(templateCache({
       filename: 'templates.js',
       module: 'templates',
@@ -76,7 +75,6 @@ gulp.task('scripts', function() {
 gulp.task('jade', function() {
   return gulp.src(paths.jade)
     .pipe(jade({ pretty: true }))
-    .pipe(rename({ extname: '.html' }))
     .pipe(gulp.dest('./www'));
 });
 
@@ -84,11 +82,7 @@ gulp.task('sass', function(done) {
   gulp.src('./src/scss/ionic.app.scss')
     .pipe(sass())
     .on('error', sass.logError)
-    .pipe(gulp.dest('./www/css/'))
-    .pipe(minifyCss({
-      keepSpecialComments: 0
-    }))
-    .pipe(rename({ extname: '.min.css' }))
+    .pipe(isProduction ? minifyCss({ keepSpecialComments: 0 }) : gutil.noop())
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
 });
