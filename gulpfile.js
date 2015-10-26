@@ -69,7 +69,7 @@ gulp.task('templates', function() {
 gulp.task('scripts', function() {
   return browserify('./src/js/app.js')
     .bundle()
-    .pipe(source('app.js'))
+    .pipe(source('app.bundle.js'))
     .pipe(isProduction ? streamify(minifyJs()) : gutil.noop())
     .pipe(gulp.dest('./www/js'));
 });
