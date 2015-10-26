@@ -1,4 +1,4 @@
-export default function AppConfig($stateProvider, $urlRouterProvider) {
+export default /* @ngInject */ function AppConfig($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router

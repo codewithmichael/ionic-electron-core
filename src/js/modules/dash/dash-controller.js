@@ -1,1 +1,1 @@
-export default function DashController($scope) {};
+export default /* @ngInject */ function DashController($scope) {};

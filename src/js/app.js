@@ -1,4 +1,5 @@
 import angular from 'angular';
+import 'ionic-angular'  // loads all externally required libs
 
 import modules from './modules';
 import templates from './templates';
