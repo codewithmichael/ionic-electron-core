@@ -8,11 +8,14 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
-var transform = require('vinyl-transform');
+var streamify = require('gulp-streamify');
 var jade = require('gulp-jade');
 var templateCache = require('gulp-angular-templatecache');
 var runSequence = require('run-sequence');
-var clean = require('gulp-clean');
+var clean = require('gulp-rimraf');
+var uglify = require('gulp-uglify');
+
+var isProduction = !!gutil.env.production;
 
 var paths = {
   fonts: ['./bower_components/ionic/fonts/*'],
@@ -26,19 +29,21 @@ var paths = {
   templates: ['./src/templates/**/*.jade']
 };
 
-gulp.task('default', function() {
-  runSequence(
-    'copy',
-    'jade',
-    'templates',
-    'scripts',
-    'sass'
-  );
+gulp.task('default', ['clean-build']);
+
+gulp.task('clean-build', function(done) {
+  runSequence('clean', 'build', done);
 });
 
 gulp.task('clean', function() {
-  return gulp.src(['./www', './src/js/templates.js'])
+  return gulp.src(['./www', './src/js/templates.js'], { read: false })
     .pipe(clean());
+});
+
+gulp.task('build', ['build-nonsequential', 'build-sequential']);
+gulp.task('build-nonsequential', ['copy', 'jade', 'sass']);
+gulp.task('build-sequential', function(done) {
+  runSequence('templates', 'scripts', done);
 });
 
 gulp.task('copy', function() {
@@ -47,7 +52,7 @@ gulp.task('copy', function() {
 });
 
 gulp.task('templates', function() {
-  gulp.src(paths.templates)
+  return gulp.src(paths.templates)
     .pipe(jade({ pretty: true }))
     .pipe(rename({ extname: '.html' }))
     .pipe(templateCache({
@@ -64,11 +69,12 @@ gulp.task('scripts', function() {
   return browserify('./src/js/app.js')
     .bundle()
     .pipe(source('app.js'))
+    .pipe(isProduction ? streamify(uglify()) : gutil.noop())
     .pipe(gulp.dest('./www/js'));
 });
 
 gulp.task('jade', function() {
-  gulp.src(paths.jade)
+  return gulp.src(paths.jade)
     .pipe(jade({ pretty: true }))
     .pipe(rename({ extname: '.html' }))
     .pipe(gulp.dest('./www'));
