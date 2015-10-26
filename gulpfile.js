@@ -8,21 +8,56 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var transform = require('vinyl-transform');
 var jade = require('gulp-jade');
+var templateCache = require('gulp-angular-templatecache');
+var runSequence = require('run-sequence');
+var clean = require('gulp-clean');
 
 var paths = {
   fonts: ['./bower_components/ionic/fonts/*'],
-  jade: ['./src/**/*.jade'],
+  jade: [
+    './src/**/*.jade',
+    '!./src/templates/**/*.jade'
+  ],
   images: ['./src/img/*'],
   js: ['./src/**/*.js'],
-  sass: ['./src/scss/**/*.scss']
+  sass: ['./src/scss/**/*.scss'],
+  templates: ['./src/templates/**/*.jade']
 };
 
-gulp.task('default', ['copy', 'jade', 'scripts', 'sass']);
+gulp.task('default', function() {
+  runSequence(
+    'copy',
+    'jade',
+    'templates',
+    'scripts',
+    'sass'
+  );
+});
+
+gulp.task('clean', function() {
+  return gulp.src(['./www', './src/js/templates.js'])
+    .pipe(clean());
+});
 
 gulp.task('copy', function() {
   gulp.src(paths.fonts).pipe(gulp.dest('www/fonts'));
   gulp.src(paths.images).pipe(gulp.dest('www/img'));
+});
+
+gulp.task('templates', function() {
+  gulp.src(paths.templates)
+    .pipe(jade({ pretty: true }))
+    .pipe(rename({ extname: '.html' }))
+    .pipe(templateCache({
+      filename: 'templates.js',
+      module: 'templates',
+      root: 'templates/',
+      moduleSystem: 'es6',
+      standalone: true
+    }))
+    .pipe(gulp.dest('./src/js'));
 });
 
 gulp.task('scripts', function() {
@@ -57,6 +92,7 @@ gulp.task('watch', function() {
   gulp.watch(assets, ['copy']);
   gulp.watch(paths.jade, ['jade']);
   gulp.watch(paths.js, ['scripts']);
+  gulp.watch(paths.templates, ['templates']);
   gulp.watch(paths.sass, ['sass']);
 });
 
