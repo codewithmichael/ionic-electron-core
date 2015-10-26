@@ -1,5 +1,4 @@
 import angular from 'angular'
-import 'ionic-angular'
 
 import account from './account'
 import chats from './chats'
