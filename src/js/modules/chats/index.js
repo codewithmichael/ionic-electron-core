@@ -1,6 +1,10 @@
 import angular from 'angular';
 
+import ChatsController from './chats-controller';
+import ChatDetailController from './chat-detail-controller';
+import ChatsFactory from './chats-factory';
+
 export default angular.module('chats', [])
-  .controller('ChatsController', require('./chats-controller'))
-  .controller('ChatDetailController', require('./chat-detail-controller'))
-  .factory('Chats', require('./chats-factory'));
+  .controller('ChatsController', ChatsController)
+  .controller('ChatDetailController', ChatDetailController)
+  .factory('Chats', ChatsFactory);
