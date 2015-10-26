@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var process = require('process');
 var bower = require('bower');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
@@ -16,7 +17,7 @@ var templateCache = require('gulp-angular-templatecache');
 var runSequence = require('run-sequence');
 var clean = require('gulp-rimraf');
 
-var isProduction = !!gutil.env.production;
+var isProduction = process.env.NODE_ENV === 'production' || !!gutil.env.production;
 
 var paths = {
   fonts: ['./bower_components/ionic/fonts/*'],
