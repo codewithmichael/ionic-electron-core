@@ -1,6 +1,6 @@
 {
   "name": "ionic-electron-core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "ionic-electron-core: An Ionic project",
   "dependencies": {
     "babelify": "^6.4.0",
