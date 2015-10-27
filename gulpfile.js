@@ -1,23 +1,31 @@
+var bower = require('bower');
+var browserify = require('browserify');
+var clean = require('gulp-rimraf');
+var concat = require('gulp-concat');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var process = require('process');
-var bower = require('bower');
-var concat = require('gulp-concat');
-var sass = require('gulp-sass');
+var jade = require('gulp-jade');
 var minifyCss = require('gulp-minify-css');
 var minifyHtml = require('gulp-minify-html');
 var minifyJs = require('gulp-uglify');
+var process = require('process');
 var rename = require('gulp-rename');
+var runSequence = require('run-sequence');
+var sass = require('gulp-sass');
 var sh = require('shelljs');
-var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
-var jade = require('gulp-jade');
 var templateCache = require('gulp-angular-templatecache');
-var runSequence = require('run-sequence');
-var clean = require('gulp-rimraf');
+
+//==============================================================================
+// * SETUP * ///////////////////////////////////////////////////////////////////
+//==============================================================================
+
+//-[ Build Env ]----------------------------------------------------------------
 
 var isProduction = process.env.NODE_ENV === 'production' || !!gutil.env.production;
+
+//-[ File Paths ]---------------------------------------------------------------
 
 var paths = {
   fonts: ['./bower_components/ionic/fonts/*'],
@@ -31,7 +39,24 @@ var paths = {
   templates: ['./src/templates/**/*.jade']
 };
 
+//==============================================================================
+// * BUILD TASKS * /////////////////////////////////////////////////////////////
+//==============================================================================
+
+//-[ Default + Watch ]----------------------------------------------------------
+
 gulp.task('default', ['clean-build']);
+
+gulp.task('watch', function() {
+  gulp.watch(paths.fonts, ['assets-fonts']);
+  gulp.watch(paths.images, ['assets-images']);
+  gulp.watch(paths.jade, ['assets-jade']);
+  gulp.watch(paths.js, ['scripts']);
+  gulp.watch(paths.templates, ['templates']);
+  gulp.watch(paths.sass, ['styles']);
+});
+
+//-[ Clean + Build ]------------------------------------------------------------
 
 gulp.task('clean-build', function(done) {
   runSequence('clean', 'build', done);
@@ -43,17 +68,35 @@ gulp.task('clean', function() {
 });
 
 gulp.task('build', ['build-nonsequential', 'build-sequential']);
-gulp.task('build-nonsequential', ['copy', 'jade', 'sass']);
+
+gulp.task('build-nonsequential', ['assets', 'styles']);
+
 gulp.task('build-sequential', function(done) {
   runSequence('templates', 'scripts', done);
 });
 
-gulp.task('copy', function() {
-  gulp.src(paths.fonts).pipe(gulp.dest('www/fonts'));
-  gulp.src(paths.images).pipe(gulp.dest('www/img'));
+//-[ Assets ]-------------------------------------------------------------------
+
+gulp.task('assets', ['assets-fonts', 'assets-images', 'assets-jade']);
+
+gulp.task('assets-fonts', function() {
+  return gulp.src(paths.fonts).pipe(gulp.dest('www/fonts'));
 });
 
-gulp.task('templates', function() {
+gulp.task('assets-images', function() {
+  return gulp.src(paths.images).pipe(gulp.dest('www/img'));
+});
+
+gulp.task('assets-jade', function(done) {
+  return gulp.src(paths.jade)
+    .pipe(jade({ pretty: true }))
+    .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
+    .pipe(gulp.dest('./www'));
+});
+
+//-[ Templates ]----------------------------------------------------------------
+
+gulp.task('templates', function(done) {
   return gulp.src(paths.templates)
     .pipe(jade({ pretty: true }))
     .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
@@ -67,7 +110,9 @@ gulp.task('templates', function() {
     .pipe(gulp.dest('./src/js'));
 });
 
-gulp.task('scripts', function() {
+//-[ Scripts ]------------------------------------------------------------------
+
+gulp.task('scripts', function(done) {
   return browserify('./src/js/app.js')
     .bundle()
     .pipe(source('app.bundle.js'))
@@ -75,30 +120,21 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('./www/js'));
 });
 
-gulp.task('jade', function() {
-  return gulp.src(paths.jade)
-    .pipe(jade({ pretty: true }))
-    .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
-    .pipe(gulp.dest('./www'));
-});
+//-[ Styles ]-------------------------------------------------------------------
 
-gulp.task('sass', function(done) {
-  gulp.src('./src/scss/ionic.app.scss')
+gulp.task('styles', function(done) {
+  return gulp.src('./src/scss/ionic.app.scss')
     .pipe(sass())
     .on('error', sass.logError)
     .pipe(isProduction ? minifyCss({ keepSpecialComments: 0 }) : gutil.noop())
-    .pipe(gulp.dest('./www/css/'))
-    .on('end', done);
+    .pipe(gulp.dest('./www/css/'));
 });
 
-gulp.task('watch', function() {
-  var assets = paths.fonts.concat(paths.images);
-  gulp.watch(assets, ['copy']);
-  gulp.watch(paths.jade, ['jade']);
-  gulp.watch(paths.js, ['scripts']);
-  gulp.watch(paths.templates, ['templates']);
-  gulp.watch(paths.sass, ['sass']);
-});
+//==============================================================================
+// * SYSTEM TASKS * ////////////////////////////////////////////////////////////
+//==============================================================================
+
+//-[ Installation + System Checks ]---------------------------------------------
 
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
