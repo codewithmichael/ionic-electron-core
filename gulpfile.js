@@ -1,3 +1,4 @@
+var babel = require('gulp-babel');
 var bower = require('bower');
 var browserify = require('browserify');
 var clean = require('gulp-rimraf');
@@ -24,6 +25,7 @@ var templateCache = require('gulp-angular-templatecache');
 //-[ Build Env ]----------------------------------------------------------------
 
 var isProduction = process.env.NODE_ENV === 'production' || !!gutil.env.production;
+var isDesktop = !!gutil.env.desktop;
 
 //-[ File Paths ]---------------------------------------------------------------
 
@@ -34,7 +36,8 @@ var paths = {
     '!./src/templates/**/*.jade'
   ],
   images: ['./src/img/*'],
-  js: ['./src/**/*.js'],
+  ionicJs: ['./src/js/**/*.js'],
+  electronJs: ['./src/main.js'],
   sass: ['./src/scss/**/*.scss'],
   templates: ['./src/templates/**/*.jade']
 };
@@ -51,9 +54,12 @@ gulp.task('watch', function() {
   gulp.watch(paths.fonts, ['assets-fonts']);
   gulp.watch(paths.images, ['assets-images']);
   gulp.watch(paths.jade, ['assets-jade']);
-  gulp.watch(paths.js, ['scripts']);
+  gulp.watch(paths.ionicJs, ['ionic-scripts']);
   gulp.watch(paths.templates, ['templates']);
   gulp.watch(paths.sass, ['styles']);
+  if (isDesktop) {
+    gulp.watch(paths.electronJs, ['electron-scripts']);
+  }
 });
 
 //-[ Clean + Build ]------------------------------------------------------------
@@ -67,12 +73,18 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
-gulp.task('build', ['build-nonsequential', 'build-sequential']);
+gulp.task('build', ['build-parallel', 'build-sequential']);
 
-gulp.task('build-nonsequential', ['assets', 'styles']);
+gulp.task('build-parallel', function(done) {
+  var parallel = ['assets', 'styles'];
+  if (isDesktop) {
+    parallel.push('electron-scripts');
+  }
+  runSequence(parallel, done);
+});
 
 gulp.task('build-sequential', function(done) {
-  runSequence('templates', 'scripts', done);
+  runSequence('templates', 'ionic-scripts', done);
 });
 
 //-[ Assets ]-------------------------------------------------------------------
@@ -112,12 +124,19 @@ gulp.task('templates', function(done) {
 
 //-[ Scripts ]------------------------------------------------------------------
 
-gulp.task('scripts', function(done) {
+gulp.task('ionic-scripts', function(done) {
   return browserify('./src/js/app.js')
     .bundle()
     .pipe(source('app.bundle.js'))
     .pipe(isProduction ? streamify(minifyJs()) : gutil.noop())
     .pipe(gulp.dest('./www/js'));
+});
+
+gulp.task('electron-scripts', function() {
+  return gulp.src('./src/main.js')
+    .pipe(babel())
+    .pipe(isProduction ? streamify(minifyJs()) : gutil.noop())
+    .pipe(gulp.dest('./www'));
 });
 
 //-[ Styles ]-------------------------------------------------------------------
