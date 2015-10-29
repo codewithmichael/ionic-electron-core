@@ -57,38 +57,51 @@ $ ./node_modules/.bin/gulp
 $ ./node_modules/.bin/ionic serve
 ```
 
-### Build for Mobile (Test)
+## Clean
 
-Presently, mobile source builds are the default, so build as normal:
+A `.gitignore` file is provided to keep built files from being committed, but
+you can also delete all built files at any time by running:
 ```sh
-$ gulp
+$ gulp clean
 ```
-Then use the Ionic CLI to build to your device. The first time you build you
-will need to "add" the build platform.
 
-#### Build and Run for iOS (Emulator)
+## Build for Mobile (Test)
+
+To build for mobile, provide the `--mobile` flag when building the app source.
+This will add a `script` tag to include `cordova.js` in the built app's
+`index.html` file (see load reference in `src/index.jade`):
+```sh
+$ gulp --mobile
+```
+
+Next, use the Ionic CLI to build to your device (see below). The first time you
+build you will need to "add" the build platform.
+
+### Build and Run for iOS (Emulator)
 
 A Mac is required to build for iOS. The following assumes you are on a Mac and
 have XCode and an iOS emulator installed and functional.
 ```sh
+$ gulp --mobile
 $ ionic platform add ios
 $ ionic emulate ios
 ```
 
 Your running app can be debugged using Apple's Safari web browser.
 
-#### Build and Run for Android (Emulator)
+### Build and Run for Android (Emulator)
 
 Android apps can be built from any major OS. The following assumes you have
 Java, the Android SDK, and an Android emulator installed and functional.
 ```sh
+$ gulp --mobile
 $ ionic platform add android
 $ ionic emulate android
 ```
 
 Your running app can be debugged using Google's Chrome web browser.
 
-### Build for Desktop (Test)
+## Build for Desktop (Test)
 
 To build for desktop, provide the `--desktop` flag when building the app source.
 This will build both the app content (HTML/CSS/JS) and the Node.js script(s)
@@ -115,29 +128,34 @@ $ electron --debug=5858 .
 ```
 ...and open http://127.0.0.1:8080/debug?ws=127.0.0.1:8080&port=5858 in Chrome.
 
-### Production Builds
+## Production Builds
 
 Production builds have their content minified. This significantly reduces
 release package size, but makes it nearly impossible to debug.
 
 To perform a production app build, just build as usual, but provide the
-`--production` build flag—i.e.:
+`--production` build flag—i.e. use one of the following commands:
 ```sh
 $ gulp --production
-```
-or
-```sh
+$ gulp --mobile --production
 $ gulp --desktop --production
 ```
 
-#### Build for Mobile (Production):
+The first command above can be useful to ensure minification doesn't break
+you app code by testing the built and minified app in a browser—e.g.:
+```sh
+$ gulp --production
+$ ionic serve
+```
+
+### Build for Mobile (Production):
 
 Perform a production app build and then use Ionic CLI to build to your device.
 Assuming you have already added the iOS platform to your Ionic project and you
 have a registered developer device attached via USB, you may build and push to
 the device as follows:
 ```sh
-$ gulp --production
+$ gulp --mobile --production
 $ ionic run --device ios
 ```
 
@@ -145,9 +163,10 @@ To build for Android, replace `ios` with `android` in the `ionic`
 line above.
 
 See the Apple developer documentation and/or the Android developer documentation
-for further details on packaging an application for official release in the Apple App Store and/or Google Play Store.
+for further details on packaging an application for official release in the
+Apple App Store and/or Google Play Store.
 
-#### Build for Desktop (Production):
+### Build for Desktop (Production):
 
 Perform a production app build and then use Electron to run the application
 (from the project's root directory):
@@ -159,5 +178,6 @@ $ electron .
 The steps that follow will depend on your chosen release platform(s) and how you
 want to distribute your application.
 
-For platform-specific details on rebranding and preparing your application for distribution, see
+For platform-specific details on rebranding and preparing your application for
+distribution, see
 [Electron's "Application Distribution" documentation](http://electron.atom.io/docs/latest/tutorial/application-distribution/).

@@ -9,8 +9,9 @@ html
       <link href="css/style.css" rel="stylesheet">
     // IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     link(href='css/ionic.app.css', rel='stylesheet')
-    // cordova script (this will be a 404 during development)
-    script(src='cordova.js')
+    if isMobile
+      // cordova script (this will be a 404 during development)
+      script(src='cordova.js')
     // your app's js
     script(src='js/app.bundle.js')
   body(ng-app='starter', ng-strict-di)

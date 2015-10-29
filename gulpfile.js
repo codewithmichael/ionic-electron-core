@@ -26,6 +26,13 @@ var templateCache = require('gulp-angular-templatecache');
 
 var isProduction = process.env.NODE_ENV === 'production' || !!gutil.env.production;
 var isDesktop = !!gutil.env.desktop;
+var isMobile = !!gutil.env.mobile;
+
+var jadeTemplateData = {
+  isProduction: isProduction,
+  isDesktop: isDesktop,
+  isMobile: isMobile
+};
 
 //-[ File Paths ]---------------------------------------------------------------
 
@@ -101,7 +108,10 @@ gulp.task('assets-images', function() {
 
 gulp.task('assets-jade', function(done) {
   return gulp.src(paths.jade)
-    .pipe(jade({ pretty: true }))
+    .pipe(jade({
+      pretty: true,
+      data: jadeTemplateData
+    }))
     .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
     .pipe(gulp.dest('./www'));
 });
