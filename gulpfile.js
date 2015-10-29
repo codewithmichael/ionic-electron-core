@@ -22,16 +22,20 @@ var templateCache = require('gulp-angular-templatecache');
 // * SETUP * ///////////////////////////////////////////////////////////////////
 //==============================================================================
 
-//-[ Build Env ]----------------------------------------------------------------
+//-[ Build Env + Config ]-------------------------------------------------------
 
 var isProduction = process.env.NODE_ENV === 'production' || !!gutil.env.production;
 var isDesktop = !!gutil.env.desktop;
 var isMobile = !!gutil.env.mobile;
 
-var jadeTemplateData = {
-  isProduction: isProduction,
-  isDesktop: isDesktop,
-  isMobile: isMobile
+var jadeOptions = {
+  pretty: true,
+  doctype: 'html',
+  data: {
+    isProduction: isProduction,
+    isDesktop: isDesktop,
+    isMobile: isMobile
+  }
 };
 
 //-[ File Paths ]---------------------------------------------------------------
@@ -108,10 +112,7 @@ gulp.task('assets-images', function() {
 
 gulp.task('assets-jade', function(done) {
   return gulp.src(paths.jade)
-    .pipe(jade({
-      pretty: true,
-      data: jadeTemplateData
-    }))
+    .pipe(jade(jadeOptions))
     .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
     .pipe(gulp.dest('./www'));
 });
@@ -120,7 +121,7 @@ gulp.task('assets-jade', function(done) {
 
 gulp.task('templates', function(done) {
   return gulp.src(paths.templates)
-    .pipe(jade({ pretty: true }))
+    .pipe(jade(jadeOptions))
     .pipe(isProduction ? minifyHtml({ empty: true }) : gutil.noop())
     .pipe(templateCache({
       filename: 'templates.js',
