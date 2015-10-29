@@ -3,6 +3,8 @@
 This is a simple application project core that uses Ionic and Electron to build
 for both mobile and desktop environments.
 
+Project functionality is based on [Ionic's default starter template](https://github.com/driftyco/ionic-app-base).
+
 ## Tech
 
 * [Node.js](https://nodejs.org/) + [NPM](https://www.npmjs.com/) +
